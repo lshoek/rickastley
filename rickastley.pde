@@ -189,4 +189,4 @@ class Ricklet extends PApplet
 	public void setFrames(PImage[] _frames) { frames = _frames; }
 	public void setVisibility(boolean b) { surface.setVisible(b); }
 	public PImage[] getFrames() { return frames; }
-}
+}  
