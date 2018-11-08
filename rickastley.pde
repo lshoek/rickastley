@@ -140,7 +140,7 @@ class Ricklet extends PApplet
 		if (!imageLoader.isAlive())
 		{
 			background(RAISIN);
-			image(frames[f], width/2, height/2);
+			image(frames[f], width/2, height/2, width, height);
 			text("id:"+id+" f:"+f, 20, 40);
 		}
 	}
