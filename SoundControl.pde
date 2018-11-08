@@ -36,7 +36,7 @@ class SoundControl {
    **/
   SoundControl(PApplet app) {
     //Load the soundFile from the music folder in the data folder
-    soundFile = new SoundFile(app, "music/rickastley.wav");
+    soundFile = new SoundFile(app, "../music/rickastley.wav");
     
     //Now also instantiate the actual FFT analysis object
     fft = new FFT(app, numBands);
@@ -44,7 +44,7 @@ class SoundControl {
     fft.input(soundFile);
     
     //Load the bounds CSV
-    bounds = parseBounds(loadStrings("music/bounds.csv"));
+    bounds = parseBounds(loadStrings("../music/bounds.csv"));
     //First set the frameRate to 2
     frameRate(2);
   }
