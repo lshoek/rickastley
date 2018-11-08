@@ -7,7 +7,7 @@ color MIDNIGHT = #0D3B66;
 color RAISIN = #291F1E;
 
 int counter = 0;
-int maxSketches = 5;
+int maxSketches = 4;
 int numClips = 0;
 Ricklet[] sketches;
 
@@ -57,16 +57,16 @@ void setup()
 void draw()
 {	
 	background(CORAL);
-	float pulse = soundControl.getPosition();
 
 	// update ricklets
 	for (int i=0; i<maxSketches; i++)
 	{
 		// irregularity
-		int d = (i%2>0) ? 1 : 0;
-		float sincos = (i%3<1) ? sin(pulse) : cos(pulse);
-		int shift = (int)(pow(sincos,5)*5.5);
+		// int d = (i%2>0) ? 1 : 0;
+		// float sincos = (i%3<1) ? sin(pulse) : cos(pulse);
+		// int shift = (int)(pow(sincos,5)*5.5);
 
+		float pulse = soundControl.getChannel(i);
 		sketches[i].setPulse(pulse);
 		//sketches[i].setLocationProps(sketches[i].x + shift*d, sketches[i].y + shift*(1-d));
 	}
@@ -110,7 +110,6 @@ class Ricklet extends PApplet
 	    pos = new Point(_x, _y);
 	    setSizeProps(_w, _h);
 	    id = _id;
-	    imageLoader = new ImageLoaderThread(this, 1);
   	}
 
 	void setup()
@@ -126,10 +125,10 @@ class Ricklet extends PApplet
 
 	void draw()
 	{
-		if (imageLoader.isAlive()) return;
+		if (imageLoader == null || imageLoader.isAlive()) return;
 		if (!clipsLoaded) return;
 
-		if (mousePressed) setPulse(map(mouseX, 0, width, 0, 1));
+		//if (mousePressed) setPulse(map(mouseX, 0, width, 0, 1));
 		if (wasUpdated)
 		{
 			surface.setSize(w, h);
@@ -146,13 +145,13 @@ class Ricklet extends PApplet
 		}
 	}
 
-	public void loadClip(int _x, int _y, int _w, int _h, int index) 
+	public void loadClip(int _x, int _y, int _w, int _h, int index, int sectionIndex) 
 	{ 
 		setLocationProps(_x, _y);
 		setSizeProps(_w, _h);
 		if (imageLoader == null || !imageLoader.isAlive())
 		{
-			imageLoader = new ImageLoaderThread(this, index);
+			imageLoader = new ImageLoaderThread(this, id, sectionIndex);
 			imageLoader.start();
 		}
 		clipsLoaded = true;
@@ -161,11 +160,13 @@ class Ricklet extends PApplet
 	class ImageLoaderThread extends Thread
 	{
 		Ricklet parent;
+		int sectionIndex;
 		int id;
 
-		public ImageLoaderThread(Ricklet _parent, int _id)
+		public ImageLoaderThread(Ricklet _parent, int _id, int _sectionIndex)
 		{
 			parent = _parent;
+			sectionIndex = _sectionIndex;
 			id = _id;
 		}
 
@@ -174,7 +175,8 @@ class Ricklet extends PApplet
 			if (frameLock) return;
 			frameLock = true;
 
-			File dir = new File(sketchPath("data\\" + str(id%numClips+1)));
+			File dir = new File(sketchPath("data\\" + str(sectionIndex+1) + "\\A" + (id+1)));
+			println(dir.getAbsolutePath());
 			File[] files = dir.listFiles();
 			surface.setTitle("vid: " + dir.getName());
 
