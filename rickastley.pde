@@ -16,11 +16,6 @@ boolean clicked = false;
 
 SoundControl soundControl;
 
-Point getRelative1080p(int a, int b)
-{
-	return new Point(displayWidth + 2.0 * fragCoord.xy) / iResolution.y;
-}
-
 void setup()
 {
 	surface.setTitle("controlapp");
@@ -29,7 +24,10 @@ void setup()
 	background(CORAL);
 	stroke(255);
 
-	getRelative1080p()
+	// init sections
+	sections = new boolean[numSections];
+	for (int i=0; i<numSections; i++)
+		sections[i] = false;
 
 	//Start loading the Sound
 	soundControl = new SoundControl(this);
@@ -59,33 +57,30 @@ void setup()
 void draw()
 {	
 	background(CORAL);
-
-	float t = ((float)millis()/1000.0)*6.0;
+	float pulse = soundControl.getPosition();
 
 	// update ricklets
 	for (int i=0; i<maxSketches; i++)
 	{
 		// irregularity
 		int d = (i%2>0) ? 1 : 0;
-		float sincos = (i%3<1) ? sin(t) : cos(t);
+		float sincos = (i%3<1) ? sin(pulse) : cos(pulse);
 		int shift = (int)(pow(sincos,5)*5.5);
 
-		if (mousePressed) sketches[i].setPulse(map(mouseX, 0, width, 0, 1));
+		sketches[i].setPulse(pulse);
 		//sketches[i].setLocationProps(sketches[i].x + shift*d, sketches[i].y + shift*(1-d));
 	}
 	mouse = MouseInfo.getPointerInfo().getLocation();
 	text("(" + mouse.x + ", " + mouse.y + ")", 20, 40);
 	scheduler();
+	soundControl.update();
 }
 
-void scheduler()
+Point toNative(int a, int b)
 {
-	if (clicked)
-	{
-		counter++;
-		sketches[0].loadClip(counter%numClips);
-		clicked = false;
-	}
+	return new Point(
+		int(map(a, 0, 1920, 0, displayWidth)), 
+		int(map(a, 0, 1080, 0, displayHeight)));
 }
 
 void mouseClicked() 
@@ -100,7 +95,7 @@ class Ricklet extends PApplet
 	ImageLoaderThread imageLoader;
 	
 	String name;
-	public Point pos; 
+	public Point pos;
 	public int w, h, id;
 
 	float pulse = 0;
@@ -111,7 +106,7 @@ class Ricklet extends PApplet
   	{
 	    super();
 	    parent =_parent;
-	    setLocationProps(_x, _y);
+	    pos = new Point(_x, _y);
 	    setSizeProps(_w, _h);
 	    id = _id;
   	}
@@ -121,12 +116,12 @@ class Ricklet extends PApplet
 		surface.setTitle(name);
 		surface.setResizable(true);
 		surface.setSize(w, h);
-		surface.setLocation(x, y);
+		surface.setLocation(pos.x, pos.y);
 		background(RAISIN);
 		stroke(255);
 		imageMode(CENTER);
 
-		loadClip(id);
+		loadClip(pos.x, pos.y, w, h, id);
 	}
 
 	void draw()
@@ -136,12 +131,12 @@ class Ricklet extends PApplet
 		if (wasUpdated)
 		{
 			surface.setSize(w, h);
-			surface.setLocation(x, y);
+			surface.setLocation(pos.x, pos.y);
 			wasUpdated = false;
 		}
 		float p = constrain(pulse, 0, 1);
 		int f = ceil(map(p, 0, 1, 1, frames.length-1));
-		if (frames[f] != null)
+		if (!imageLoader.isAlive())
 		{
 			background(RAISIN);
 			image(frames[f], width/2, height/2);
@@ -174,17 +169,16 @@ class Ricklet extends PApplet
 		public void run()
 		{
 			if (frameLock) return;
-
 			frameLock = true;
+
 			File dir = new File(sketchPath("data\\" + str(id%numClips+1)));
 			File[] files = dir.listFiles();
 			surface.setTitle("vid: " + dir.getName());
 
 			frames = new PImage[files.length];
-			for (int i=0; i<files.length; i++){
+			for (int i=0; i<files.length; i++)
 				frames[i] = loadImage(dir + "\\" + files[i].getName());
-				if (id==0) println(frames[i]!=null);
-			}
+
 			frameLock = false;
 		}
 	}
@@ -193,6 +187,6 @@ class Ricklet extends PApplet
 	public void setLocationProps(int _x, int _y) { pos.x=_x; pos.y=_y; wasUpdated=true; }
 	public void setSizeProps(int _w, int _h) { w=_w; h=_h; wasUpdated=true; }
 	public void setFrames(PImage[] _frames) { frames = _frames; }
-	public void setVisibility(boolean b) { surface.setVisible(b) };
+	public void setVisibility(boolean b) { surface.setVisible(b); }
 	public PImage[] getFrames() { return frames; }
 }
