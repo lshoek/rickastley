@@ -50,6 +50,25 @@ class SoundControl {
   }
   
   /**
+  Returns the channel output by name (A, B, C, D, E)
+  **/
+  float getChannel(String name){
+    name = name.toLowerCase();
+    if(name.equals("a")) return getBand(0);
+    else if(name.equals("b")) return getBand(1);
+    else if(name.equals("c")) return getBand(5);
+    else if(name.equals("d")) return getBand(7);
+    else if(name.equals("e")) return getBand(28);
+    else return 0f;
+  }
+  
+  float getChannelA(){return getChannel("A");}
+  float getChannelB(){return getChannel("B");}
+  float getChannelC(){return getChannel("C");}
+  float getChannelD(){return getChannel("D");}
+  float getChannelE(){return getChannel("E");}
+  
+  /**
   Updates SoundControl, forwards its calls to checkWaiting
   or analyze, depending on the circumstances
   **/
