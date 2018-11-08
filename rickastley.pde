@@ -101,6 +101,7 @@ class Ricklet extends PApplet
 	float pulse = 0;
 	boolean wasUpdated = false;
 	boolean frameLock = false;
+	boolean clipsLoaded = false;
 
 	public Ricklet(PApplet _parent, int _x, int _y, int _w, int _h, int _id)
   	{
@@ -109,6 +110,7 @@ class Ricklet extends PApplet
 	    pos = new Point(_x, _y);
 	    setSizeProps(_w, _h);
 	    id = _id;
+	    imageLoader = new ImageLoaderThread(this, 1);
   	}
 
 	void setup()
@@ -120,13 +122,13 @@ class Ricklet extends PApplet
 		background(RAISIN);
 		stroke(255);
 		imageMode(CENTER);
-
-		loadClip(pos.x, pos.y, w, h, id);
 	}
 
 	void draw()
 	{
 		if (imageLoader.isAlive()) return;
+		if (!clipsLoaded) return;
+
 		if (mousePressed) setPulse(map(mouseX, 0, width, 0, 1));
 		if (wasUpdated)
 		{
@@ -153,6 +155,7 @@ class Ricklet extends PApplet
 			imageLoader = new ImageLoaderThread(this, index);
 			imageLoader.start();
 		}
+		clipsLoaded = true;
 	}
 
 	class ImageLoaderThread extends Thread

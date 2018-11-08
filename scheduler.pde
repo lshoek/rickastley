@@ -40,9 +40,10 @@ void scheduler()
 				int(random(0, displayHeight-720)), 
 				int(random(240, 720)), 
 				int(random(240, 720)), 
-				4);					
+				4);
+			markSection(sectionIndex);			
 		}
-		if (soundControl.getPosition() > 5.0) sectionIndex++;
+		sectionIndex++;
 		break;
 
 		case 1:
@@ -54,7 +55,7 @@ void scheduler()
 				int(random(240, 720)), 
 				int(random(240, 720)), 
 				0);
-			markPlayed(sectionIndex);
+			markSection(sectionIndex);
 		}
 		if (soundControl.getPosition() > 10.0) sectionIndex++;
 		break;
@@ -63,8 +64,8 @@ void scheduler()
 	}
 }
 
-void markPlayed(int index)
+void markSection(int index)
 {
-	if (sections[sectionIndex]) return;
-	sections[sectionIndex] = true;
+	sections[index] = true;
+	println("started composition #" + index);
 }
