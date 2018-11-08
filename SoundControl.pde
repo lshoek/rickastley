@@ -63,7 +63,7 @@ class SoundControl {
     float min = bounds[i][0];
     float max = bounds[i][1];
     //Now scale the value and return it
-    return map(rawBand, min, max, 0, 1);
+    return constrain(map(rawBand, min, max, 0, 1), 0, 1);
   }
 
   /**
