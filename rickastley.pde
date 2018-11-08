@@ -74,6 +74,9 @@ void draw()
 		sketches[0].loadClip(counter%numClips);
 		clicked = false;
 	}
+
+  //Update soundControl
+  soundControl.update();
 }
 
 void mouseClicked() 
