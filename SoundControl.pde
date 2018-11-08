@@ -20,6 +20,12 @@ class SoundControl {
 
   //Never Gonna Give You Up wave file.
   SoundFile soundFile;
+  
+  //The boolean that shows if we're waiting for permission to start
+  boolean waiting = true;
+  
+  //Millis that started playback
+  int startTime = 0;
 
   /**
    Creates a new SoundControl object, this
@@ -39,13 +45,52 @@ class SoundControl {
     
     //Load the bounds CSV
     bounds = parseBounds(loadStrings("music/bounds.csv"));
+    //First set the frameRate to 2
+    frameRate(2);
   }
+  
+  /**
+  Updates SoundControl, forwards its calls to checkWaiting
+  or analyze, depending on the circumstances
+  **/
+  void update(){
+    if(waiting){
+      checkWaiting();
+    }else{
+      analyze();
+    }
+  }
+  
+  /**
+  Returns the position of the playback in seconds
+  **/
+  float getPosition(){
+    return (millis() - startTime) / 1000f;
+  }
+  
+  /**
+  Will check if we can start yet, if so we do
+  **/
+  void checkWaiting(){
+    String[] lines = loadStrings("https://www.interwing.nl/meta-media/start.txt");
+    lines[0] = lines[0].replaceAll("\n", "").trim();
+    if(lines[0].equals("1")){
+      //We're no longer waiting, we can start all applications
+      waiting = false;
+      //Now we start
+      start();
+      //Then we set the frameRate to 30
+      frameRate(60);
+    }
+  }
+
   
   /**
   Starts playback and starts the first analysis
   **/
   void start(){
     soundFile.play();
+    startTime = millis();
     analyze();
   }
   
