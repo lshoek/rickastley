@@ -16,6 +16,11 @@ boolean clicked = false;
 
 SoundControl soundControl;
 
+Point getRelative1080p(int a, int b)
+{
+	return new Point(displayWidth + 2.0 * fragCoord.xy) / iResolution.y;
+}
+
 void setup()
 {
 	surface.setTitle("controlapp");
@@ -24,8 +29,10 @@ void setup()
 	background(CORAL);
 	stroke(255);
 
-  //Start loading the Sound
-  soundControl = new SoundControl(this);
+	getRelative1080p()
+
+	//Start loading the Sound
+	soundControl = new SoundControl(this);
 
 	File dir = new File(sketchPath("data"));
 	numClips = dir.listFiles().length;
@@ -68,6 +75,11 @@ void draw()
 	}
 	mouse = MouseInfo.getPointerInfo().getLocation();
 	text("(" + mouse.x + ", " + mouse.y + ")", 20, 40);
+	scheduler();
+}
+
+void scheduler()
+{
 	if (clicked)
 	{
 		counter++;
@@ -91,7 +103,8 @@ class Ricklet extends PApplet
 	ImageLoaderThread imageLoader;
 	
 	String name;
-	public int x, y, w, h, id;
+	public Point pos; 
+	public int w, h, id;
 
 	float pulse = 0;
 	boolean wasUpdated = false;
@@ -139,8 +152,10 @@ class Ricklet extends PApplet
 		}
 	}
 
-	public void loadClip(int index) 
+	public void loadClip(int _x, int _y, int _w, int _h, int index) 
 	{ 
+		setLocationProps(_x, _y);
+		setSizeProps(_w, _h);
 		if (imageLoader == null || !imageLoader.isAlive())
 		{
 			imageLoader = new ImageLoaderThread(this, index);
@@ -178,8 +193,9 @@ class Ricklet extends PApplet
 	}
 	public int getId() { return id; }
 	public void setPulse(float val) { pulse = val; }
-	public void setLocationProps(int _x, int _y) { x=_x; y=_y; wasUpdated=true; }
+	public void setLocationProps(int _x, int _y) { pos.x=_x; pos.y=_y; wasUpdated=true; }
 	public void setSizeProps(int _w, int _h) { w=_w; h=_h; wasUpdated=true; }
 	public void setFrames(PImage[] _frames) { frames = _frames; }
+	public void setVisibility(boolean b) { surface.setVisible(b) };
 	public PImage[] getFrames() { return frames; }
 }
