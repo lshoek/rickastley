@@ -36,7 +36,7 @@ class SoundControl {
    **/
   SoundControl(PApplet app) {
     //Load the soundFile from the music folder in the data folder
-    soundFile = new SoundFile(app, "music/rickastley.wav");
+    soundFile = new SoundFile(app, "../music/rickastley.wav");
     
     //Now also instantiate the actual FFT analysis object
     fft = new FFT(app, numBands);
@@ -44,10 +44,29 @@ class SoundControl {
     fft.input(soundFile);
     
     //Load the bounds CSV
-    bounds = parseBounds(loadStrings("music/bounds.csv"));
+    bounds = parseBounds(loadStrings("../music/bounds.csv"));
     //First set the frameRate to 2
     frameRate(2);
   }
+  
+  /**
+  Returns the channel output by name (A, B, C, D, E)
+  **/
+  float getChannel(String name){
+    name = name.toLowerCase();
+    if(name.equals("a")) return getBand(0);
+    else if(name.equals("b")) return getBand(1);
+    else if(name.equals("c")) return getBand(5);
+    else if(name.equals("d")) return getBand(7);
+    else if(name.equals("e")) return getBand(28);
+    else return 0f;
+  }
+  
+  float getChannelA(){return getChannel("A");}
+  float getChannelB(){return getChannel("B");}
+  float getChannelC(){return getChannel("C");}
+  float getChannelD(){return getChannel("D");}
+  float getChannelE(){return getChannel("E");}
   
   /**
   Updates SoundControl, forwards its calls to checkWaiting

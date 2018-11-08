@@ -78,9 +78,21 @@ void draw()
 
 Point toNative(int a, int b)
 {
+<<<<<<< HEAD
 	return new Point(
 		int(map(a, 0, 1920, 0, displayWidth)), 
 		int(map(a, 0, 1080, 0, displayHeight)));
+=======
+	if (clicked)
+	{
+		counter++;
+		sketches[0].loadClip(counter%numClips);
+		clicked = false;
+	}
+
+  //Update soundControl
+  soundControl.update();
+>>>>>>> f887857b378aea6b21bf64b91cc8e130c564792b
 }
 
 void mouseClicked() 
