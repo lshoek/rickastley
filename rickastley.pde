@@ -14,6 +14,8 @@ Ricklet[] sketches;
 Point mouse;
 boolean clicked = false;
 
+SoundControl soundControl;
+
 void setup()
 {
 	surface.setTitle("controlapp");
@@ -21,6 +23,9 @@ void setup()
 	surface.setLocation(displayWidth - width, displayHeight - height);
 	background(CORAL);
 	stroke(255);
+
+  //Start loading the Sound
+  soundControl = new SoundControl(this);
 
 	File dir = new File(sketchPath("data"));
 	numClips = dir.listFiles().length;
