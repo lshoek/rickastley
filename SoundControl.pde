@@ -20,10 +20,10 @@ class SoundControl {
 
   //Never Gonna Give You Up wave file.
   SoundFile soundFile;
-  
+
   //The boolean that shows if we're waiting for permission to start
   boolean waiting = true;
-  
+
   //Millis that started playback
   int startTime = 0;
 
@@ -37,63 +37,56 @@ class SoundControl {
   SoundControl(PApplet app) {
     //Load the soundFile from the music folder in the data folder
     soundFile = new SoundFile(app, "../music/rickastley.wav");
-    
+
     //Now also instantiate the actual FFT analysis object
     fft = new FFT(app, numBands);
     //Set the input of the FFT analysis to the soundFile that just loaded
     fft.input(soundFile);
-    
+
     //Load the bounds CSV
     bounds = parseBounds(loadStrings("../music/bounds.csv"));
     //First set the frameRate to 2
     frameRate(2);
   }
-  
+
   /**
-  Returns the channel output by name (A, B, C, D, E)
-  **/
-  float getChannel(String name){
-    name = name.toLowerCase();
-    if(name.equals("a")) return getBand(0);
-    else if(name.equals("b")) return getBand(1);
-    else if(name.equals("c")) return getBand(5);
-    else if(name.equals("d")) return getBand(7);
-    else if(name.equals("e")) return getBand(28);
+   Returns the channel output by name (A, B, C, D, E)
+   **/
+  float getChannel(int i) {
+    if (i == 0) return getBand(0);
+    else if (i == 1) return getBand(1);
+    else if (i == 2) return getBand(5);
+    else if (i == 3) return getBand(7);
+    else if (i == 4) return getBand(28);
     else return 0f;
   }
-  
-  float getChannelA(){return getChannel("A");}
-  float getChannelB(){return getChannel("B");}
-  float getChannelC(){return getChannel("C");}
-  float getChannelD(){return getChannel("D");}
-  float getChannelE(){return getChannel("E");}
-  
+
   /**
-  Updates SoundControl, forwards its calls to checkWaiting
-  or analyze, depending on the circumstances
-  **/
-  void update(){
-    if(waiting){
+   Updates SoundControl, forwards its calls to checkWaiting
+   or analyze, depending on the circumstances
+   **/
+  void update() {
+    if (waiting) {
       checkWaiting();
-    }else{
+    } else {
       analyze();
     }
   }
-  
+
   /**
-  Returns the position of the playback in seconds
-  **/
-  float getPosition(){
+   Returns the position of the playback in seconds
+   **/
+  float getPosition() {
     return (millis() - startTime) / 1000f;
   }
-  
+
   /**
-  Will check if we can start yet, if so we do
-  **/
-  void checkWaiting(){
+   Will check if we can start yet, if so we do
+   **/
+  void checkWaiting() {
     String[] lines = loadStrings("https://www.interwing.nl/meta-media/start.txt");
     lines[0] = lines[0].replaceAll("\n", "").trim();
-    if(lines[0].equals("1")){
+    if (lines[0].equals("1")) {
       //We're no longer waiting, we can start all applications
       waiting = false;
       //Now we start
@@ -103,22 +96,22 @@ class SoundControl {
     }
   }
 
-  
+
   /**
-  Starts playback and starts the first analysis
-  **/
-  void start(){
+   Starts playback and starts the first analysis
+   **/
+  void start() {
     soundFile.play();
     startTime = millis();
     analyze();
   }
-  
+
   /**
-  Gets the output of a specific frequency band, mapped to 
-  a normalized 0-1 value.
-  @param Integer i the index of the band
-  **/
-  float getBand(int i){
+   Gets the output of a specific frequency band, mapped to 
+   a normalized 0-1 value.
+   @param Integer i the index of the band
+   **/
+  float getBand(int i) {
     //Constrain the index of the bands to normal values (0-numBands);
     i = constrain(i, 0, numBands);
     //Lookup the raw value in the eased spectrum
@@ -142,16 +135,16 @@ class SoundControl {
       spectrum[i] += (bands[i] - spectrum[i]) * 0.1;
     }
   }
-  
+
   /**
-  Returns the bounds that have been calculated and saved to disk,
-  now this file needs to be parsed into a 2D array to be read back.
-  **/
-  float[][] parseBounds(String[] lines){
+   Returns the bounds that have been calculated and saved to disk,
+   now this file needs to be parsed into a 2D array to be read back.
+   **/
+  float[][] parseBounds(String[] lines) {
     //Create the 2D array
     float[][] bnds = new float[numBands][2];
     //Parse each line untill we find EOF or have parse the right amount of channels
-    for(int i = 0; i < lines.length && i < numBands; i++){
+    for (int i = 0; i < lines.length && i < numBands; i++) {
       //Split the line into its parts
       String[] parts = lines[i].split(",");
       //Now try to parse both parts
