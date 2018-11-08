@@ -37,13 +37,8 @@ void setup()
 
 	sketches = new Ricklet[maxSketches];
 	for (int i=0; i<maxSketches; i++)
-	{
-		sketches[i] = new Ricklet(this, 
-			int(random(0, displayWidth-720)), 
-			int(random(0, displayHeight-720)), 
-			int(random(240, 720)), 
-			int(random(240, 720)), i);
-	}
+		sketches[i] = new Ricklet(this, 0, 0, 0, 0, i);
+
 	// run sketches
 	for (int i=0; i<maxSketches; i++)
 	{
@@ -128,7 +123,6 @@ class Ricklet extends PApplet
 		if (imageLoader == null || imageLoader.isAlive()) return;
 		if (!clipsLoaded) return;
 
-		//if (mousePressed) setPulse(map(mouseX, 0, width, 0, 1));
 		if (wasUpdated)
 		{
 			surface.setSize(w, h);

@@ -37,21 +37,15 @@ void scheduler()
 				3, sectionIndex);
 			markSection(sectionIndex);			
 		}
-		sectionIndex++;
+		if (soundControl.getPosition() > 8.0) sectionIndex++;
 		break;
 
 		case 1:
-		// if (!sections[sectionIndex])
-		// {
-		// 	sketches[0].loadClip(
-		// 		int(random(0, displayWidth-720)), 
-		// 		int(random(0, displayHeight-720)), 
-		// 		int(random(240, 720)), 
-		// 		int(random(240, 720)), 
-		// 		0, sectionIndex);
-		// 	markSection(sectionIndex);
-		// }
-		// if (soundControl.getPosition() > 10.0) sectionIndex++;
+		if (!sections[sectionIndex])
+		{
+			markSection(sectionIndex);
+		}
+		if (soundControl.getPosition() > 24.0) sectionIndex++;
 		break;
 		default:
 		break;
