@@ -58,7 +58,7 @@ void draw()
 	// update ricklets
 	for (int i=0; i<maxSketches; i++)
 	{
-		float pulse = soundControl.getChannel(i);
+		float pulse = soundControl.getChannel(sketches[i].getBand());
 		float t = soundControl.getPosition() * 6.0;
 
 		//irregularity
@@ -135,9 +135,8 @@ class Ricklet extends PApplet
 			surface.setLocation(pos.x, pos.y);
 			wasUpdated = false;
 		}
-    if(soundControl.waiting) return;
+    	if(soundControl.waiting) return;
 
-		// pulse = soundControl.getChannel(i);
 		float p = constrain(pulse, 0, 1);
 		int f = ceil(map(p, 0, 1, 1, frames.length-1));
 		if (!imageLoader.isAlive())
@@ -148,10 +147,9 @@ class Ricklet extends PApplet
 		}
 	}
 
-	public void loadClip(int _x, int _y, int _w, int _h, int sectionIndex) 
+	public void loadClip(int _x, int _y, int _w, int _h, int sectionIndex, int _band) 
 	{
 		// set band
-
 		((SmoothCanvas)surface.getNative()).getFrame().toFront();
 		setLocationProps(_x, _y);
 		setSizeProps(_w, _h);
@@ -160,6 +158,7 @@ class Ricklet extends PApplet
 			imageLoader = new ImageLoaderThread(this, id, sectionIndex);
 			imageLoader.start();
 		}
+		band = _band;
 		clipsLoaded = true;
 	}
 
@@ -194,6 +193,7 @@ class Ricklet extends PApplet
 		}
 	}
 	public int getId() { return id; }
+	public int getBand() { return band; }	
 	public void setPulse(float val) { pulse = val; }
 	public void setLocationProps(int _x, int _y) { pos.x=_x; pos.y=_y; wasUpdated=true; }
 	public void setSizeProps(int _w, int _h) { w=_w; h=_h; wasUpdated=true; }
