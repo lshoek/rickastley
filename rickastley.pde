@@ -1,13 +1,15 @@
 import java.io.File;
 import java.awt.MouseInfo;
 import java.awt.Point;
+import processing.awt.PSurfaceAWT;
+import processing.awt.PSurfaceAWT.SmoothCanvas;
 
 color CORAL = #F64740;
 color MIDNIGHT = #0D3B66;
 color RAISIN = #291F1E;
 
 int counter = 0;
-int maxSketches = 4;
+int maxSketches = 5;
 int numClips = 0;
 Ricklet[] sketches;
 
@@ -24,13 +26,10 @@ void setup()
 	background(CORAL);
 	stroke(255);
 
-	// init sections
-	sections = new boolean[numSections];
-	for (int i=0; i<numSections; i++)
-		sections[i] = false;
-
 	//Start loading the Sound
 	soundControl = new SoundControl(this);
+
+	initScheduler();
 
 	File dir = new File(sketchPath("data"));
 	numClips = dir.listFiles().length;
@@ -56,10 +55,10 @@ void draw()
 	// update ricklets
 	for (int i=0; i<maxSketches; i++)
 	{
-		// irregularity
-		// int d = (i%2>0) ? 1 : 0;
-		// float sincos = (i%3<1) ? sin(pulse) : cos(pulse);
-		// int shift = (int)(pow(sincos,5)*5.5);
+		//irregularity
+		//int d = (i%2>0) ? 1 : 0;
+		//float sincos = (i%3<1) ? sin(pulse) : cos(pulse);
+		//int shift = (int)(pow(sincos,5)*5.5);
 
 		float pulse = soundControl.getChannel(i);
 		sketches[i].setPulse(pulse);
@@ -71,12 +70,12 @@ void draw()
 	soundControl.update();
 }
 
-Point toNative(int a, int b)
-{
-	return new Point(
-		int(map(a, 0, 1920, 0, displayWidth)), 
-		int(map(a, 0, 1080, 0, displayHeight)));
-}
+// Point toNative(int a, int b)
+// {
+// 	return new Point(
+// 		int(map(a, 0, 1920, 0, displayWidth)), 
+// 		int(map(a, 0, 1080, 0, displayHeight)));
+// }
 
 void mouseClicked() 
 {
@@ -93,6 +92,7 @@ class Ricklet extends PApplet
 	public Point pos;
 	public int w, h, id;
 
+	int band = 0;
 	float pulse = 0;
 	boolean wasUpdated = false;
 	boolean frameLock = false;
@@ -123,12 +123,14 @@ class Ricklet extends PApplet
 		if (imageLoader == null || imageLoader.isAlive()) return;
 		if (!clipsLoaded) return;
 
-		if (wasUpdated)
+		if (true)
 		{
 			surface.setSize(w, h);
 			surface.setLocation(pos.x, pos.y);
 			wasUpdated = false;
 		}
+
+		// pulse = soundControl.getChannel(i);
 		float p = constrain(pulse, 0, 1);
 		int f = ceil(map(p, 0, 1, 1, frames.length-1));
 		if (!imageLoader.isAlive())
@@ -139,8 +141,11 @@ class Ricklet extends PApplet
 		}
 	}
 
-	public void loadClip(int _x, int _y, int _w, int _h, int index, int sectionIndex) 
-	{ 
+	public void loadClip(int _x, int _y, int _w, int _h, int sectionIndex) 
+	{
+		// set band
+
+		((SmoothCanvas)surface.getNative()).getFrame().toFront();
 		setLocationProps(_x, _y);
 		setSizeProps(_w, _h);
 		if (imageLoader == null || !imageLoader.isAlive())
@@ -169,14 +174,14 @@ class Ricklet extends PApplet
 			if (frameLock) return;
 			frameLock = true;
 
-			File dir = new File(sketchPath("data\\" + str(sectionIndex+1) + "\\A" + (id+1)));
+			File dir = new File(sketchPath("data/" + str(sectionIndex+1) + "/A" + (id+1)));
 			println(dir.getAbsolutePath());
 			File[] files = dir.listFiles();
 			surface.setTitle("vid: " + dir.getName());
 
 			frames = new PImage[files.length];
 			for (int i=0; i<files.length; i++)
-				frames[i] = loadImage(dir + "\\" + files[i].getName());
+				frames[i] = loadImage(dir + "/" + files[i].getName());
 
 			frameLock = false;
 		}
