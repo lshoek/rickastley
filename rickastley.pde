@@ -22,6 +22,7 @@ void setup()
 {
 	surface.setTitle("controlapp");
 	surface.setSize(720, 240);
+  surface.setVisible(false);
 	surface.setLocation(displayWidth - width, displayHeight - height);
 	background(CORAL);
 	stroke(255);
@@ -132,6 +133,7 @@ class Ricklet extends PApplet
 			surface.setLocation(pos.x, pos.y);
 			wasUpdated = false;
 		}
+    if(soundControl.waiting) return;
 
 		// pulse = soundControl.getChannel(i);
 		float p = constrain(pulse, 0, 1);

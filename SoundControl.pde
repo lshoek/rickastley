@@ -97,7 +97,7 @@ class SoundControl {
       //Now we start
       start();
       //Then we set the frameRate to 30
-      frameRate(60);
+      frameRate(30);
     }
   }
 
