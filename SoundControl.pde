@@ -54,10 +54,10 @@ class SoundControl {
    **/
   float getChannel(int i) {
     if (i == 0) return getBand(0);
-    else if (i == 1) return getBand(1);
-    else if (i == 2) return getBand(5);
-    else if (i == 3) return getBand(7);
-    else if (i == 4) return getBand(28);
+    else if (i == 1) return getExtremeBand(1);
+    else if (i == 2) return getExtremeBand(5);
+    else if (i == 3) return getExtremeBand(7);
+    else if (i == 4) return getExtremeBand(28);
     else return 0f;
   }
 
@@ -97,7 +97,7 @@ class SoundControl {
       //Now we start
       start();
       //Then we set the frameRate to 30
-      frameRate(60);
+      frameRate(30);
     }
   }
 
@@ -126,6 +126,16 @@ class SoundControl {
     float max = bounds[i][1];
     //Now scale the value and return it
     return constrain(map(rawBand, min, max, 0, 1), 0, 1);
+  }
+  
+  /**
+  Extremize the output
+  **/
+  float getExtremeBand(int i){
+    float val = getBand(i);
+    float diff = min(val, 1 - val);
+    boolean negative = diff == val;
+    return val + (negative? -diff: diff) * 0.1;
   }
 
   /**
