@@ -4,10 +4,10 @@
 
 boolean[] sections;
 
-int sectionIndex = 2;
+int sectionIndex = 0;
 int numSections = 10;
 
-boolean debugLock = true;
+boolean debugLock = false;
 
 void initScheduler()
 {
@@ -18,6 +18,7 @@ void initScheduler()
 
 void scheduler()
 {
+	println(soundControl.getPosition());
 	switch (sectionIndex) 
 	{
 		case 0:
@@ -47,10 +48,9 @@ void scheduler()
 		case 2:
 		if (!sections[sectionIndex])
 		{
-			sketches[2].loadClip(500, 320, 400, 240, sectionIndex);			
-			sketches[3].loadClip(480, 540, 500, 240, sectionIndex); 
-			sketches[0].loadClip(460, 760, 400, 240, sectionIndex);
-
+			sketches[0].loadClip(640, 720, 320, 240, sectionIndex);	
+			sketches[3].loadClip(560, 500, 640, 240, sectionIndex); 
+			sketches[2].loadClip(580, 260, 480, 240, sectionIndex);		
 			sketches[1].loadClip(640, 25, 320, 240, sectionIndex); 
 			markSection(sectionIndex);
 		}
@@ -60,6 +60,10 @@ void scheduler()
 		case 3:
 		if (!sections[sectionIndex])
 		{
+			sketches[3].loadClip(960, 250, 320, 600, sectionIndex); 		
+			sketches[0].loadClip(680, 600, 580, 360, sectionIndex);				
+			sketches[2].loadClip(615, 360, 480, 240, sectionIndex);			
+			sketches[1].loadClip(780, 50, 320, 320, sectionIndex); 			
 			markSection(sectionIndex);
 		}
 		if (soundControl.getPosition() > 84.0) nextSection();
@@ -67,7 +71,11 @@ void scheduler()
 
 		case 4:
 		if (!sections[sectionIndex])
-		{
+		{	
+			sketches[0].loadClip(640, 560, 420, 480, sectionIndex);				
+			sketches[3].loadClip(700, 200, 480, 600, sectionIndex); 
+			sketches[2].loadClip(860, 300, 320, 240, sectionIndex);						
+			sketches[1].loadClip(780, -20, 320, 320, sectionIndex); 			
 			markSection(sectionIndex);
 		}
 		if (soundControl.getPosition() > 119.0) nextSection();
@@ -100,7 +108,6 @@ void scheduler()
 		case 7:
 		if (!sections[sectionIndex])
 		{
-			sketches[3].setVisibility(true);
 			sketches[4].setVisibility(true);
 
 			sketches[4].loadClip(1100, 250, 500, 400, sectionIndex); // leftarm
