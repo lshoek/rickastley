@@ -26,10 +26,10 @@ void scheduler()
 		{
 			sketches[4].setVisibility(false);
 
-			sketches[0].loadClip(500, 650, 400, 320, sectionIndex, 0);			
+			sketches[0].loadClip(500, 650, 400, 320, sectionIndex, 2);			
 			sketches[3].loadClip(925, 400, 300, 600, sectionIndex, 0); 
-			sketches[2].loadClip(600, 300, 600, 400, sectionIndex, 0); 
-			sketches[1].loadClip(640, 0, 400, 400, sectionIndex, 0); 
+			sketches[2].loadClip(600, 300, 600, 400, sectionIndex, 3); 
+			sketches[1].loadClip(640, 0, 400, 400, sectionIndex, 2); 
 			markSection(sectionIndex);
 		}
 		if (soundControl.getPosition() > 18.0) nextSection();
@@ -148,7 +148,7 @@ void scheduler()
 			sketches[0].loadClip(640, 75, 400, 400, sectionIndex, 0); 
 			markSection(sectionIndex);
 		}
-		if (soundControl.getPosition() > 317.0) nextSection();
+		if (soundControl.getPosition() > 317.0) exit();
 		break;
 
 		default:

@@ -64,23 +64,17 @@ void draw()
 		//irregularity
 		int d = (i%2>0) ? 1 : 0;
 		float sincos = (i%3<1) ? sin(t) : cos(t);
-		int shift = (int)(pow(sincos,5)*2.);
+		int shift = (int)(pow(sincos,5)*2.0);
 
 		sketches[i].setPulse(pulse);
-		sketches[i].setLocationProps(sketches[i].pos.x + shift*d, sketches[i].pos.y + shift*(1-d));
+		if (!soundControl.waiting)
+			sketches[i].setLocationProps(sketches[i].pos.x + shift*d, sketches[i].pos.y + shift*(1-d));
 	}
 	mouse = MouseInfo.getPointerInfo().getLocation();
 	text("(" + mouse.x + ", " + mouse.y + ")", 20, 40);
 	scheduler();
 	soundControl.update();
 }
-
-// Point toNative(int a, int b)
-// {
-// 	return new Point(
-// 		int(map(a, 0, 1920, 0, displayWidth)), 
-// 		int(map(a, 0, 1080, 0, displayHeight)));
-// }
 
 void mouseClicked() 
 {
@@ -121,7 +115,7 @@ class Ricklet extends PApplet
 		background(RAISIN);
 		stroke(255);
 		imageMode(CENTER);
-    frameRate(30);
+    	frameRate(30);
 	}
 
 	void draw()
@@ -149,7 +143,6 @@ class Ricklet extends PApplet
 
 	public void loadClip(int _x, int _y, int _w, int _h, int sectionIndex, int _band) 
 	{
-		// set band
 		((SmoothCanvas)surface.getNative()).getFrame().toFront();
 		setLocationProps(_x, _y);
 		setSizeProps(_w, _h);
