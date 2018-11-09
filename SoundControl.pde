@@ -84,7 +84,12 @@ class SoundControl {
    Will check if we can start yet, if so we do
    **/
   void checkWaiting() {
-    String[] lines = loadStrings("https://www.interwing.nl/meta-media/start.txt");
+    String[] lines;
+    try{
+      lines = loadStrings("https://www.interwing.nl/meta-media/start.txt");
+    }catch(Exception e){
+      lines = new String[]{"1"};
+    }
     lines[0] = lines[0].replaceAll("\n", "").trim();
     if (lines[0].equals("1")) {
       //We're no longer waiting, we can start all applications
