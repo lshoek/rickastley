@@ -22,7 +22,7 @@ void setup()
 {
 	surface.setTitle("controlapp");
 	surface.setSize(720, 240);
-  surface.setVisible(false);
+  	surface.setVisible(false);
 	surface.setLocation(displayWidth - width, displayHeight - height);
 	background(CORAL);
 	stroke(255);
@@ -30,14 +30,14 @@ void setup()
 	//Start loading the Sound
 	soundControl = new SoundControl(this);
 
-	initScheduler();
-
 	File dir = new File(sketchPath("data"));
 	numClips = dir.listFiles().length;
 
 	sketches = new Ricklet[maxSketches];
 	for (int i=0; i<maxSketches; i++)
 		sketches[i] = new Ricklet(this, 0, 0, 0, 0, i);
+
+
 
 	// run sketches
 	for (int i=0; i<maxSketches; i++)
@@ -47,8 +47,8 @@ void setup()
 			"--sketch-path=" + sketchPath(), "" }, 
 			sketches[i]);
 	}
-
-  frameRate(30);
+	initScheduler();
+  	frameRate(30);
 }
 
 void draw()
@@ -58,14 +58,16 @@ void draw()
 	// update ricklets
 	for (int i=0; i<maxSketches; i++)
 	{
-		//irregularity
-		//int d = (i%2>0) ? 1 : 0;
-		//float sincos = (i%3<1) ? sin(pulse) : cos(pulse);
-		//int shift = (int)(pow(sincos,5)*5.5);
-
 		float pulse = soundControl.getChannel(i);
+		float t = soundControl.getPosition() * 6.0;
+
+		//irregularity
+		int d = (i%2>0) ? 1 : 0;
+		float sincos = (i%3<1) ? sin(t) : cos(t);
+		int shift = (int)(pow(sincos,5)*2.);
+
 		sketches[i].setPulse(pulse);
-		//sketches[i].setLocationProps(sketches[i].x + shift*d, sketches[i].y + shift*(1-d));
+		sketches[i].setLocationProps(sketches[i].pos.x + shift*d, sketches[i].pos.y + shift*(1-d));
 	}
 	mouse = MouseInfo.getPointerInfo().getLocation();
 	text("(" + mouse.x + ", " + mouse.y + ")", 20, 40);

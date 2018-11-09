@@ -24,6 +24,8 @@ void scheduler()
 		case 0:
 		if (!sections[sectionIndex])
 		{
+			sketches[4].setVisibility(false);
+			
 			sketches[0].loadClip(500, 650, 400, 320, sectionIndex);			
 			sketches[3].loadClip(925, 400, 300, 600, sectionIndex); 
 			sketches[2].loadClip(600, 300, 600, 400, sectionIndex); 
