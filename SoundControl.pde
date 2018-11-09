@@ -147,8 +147,13 @@ class SoundControl {
     fft.analyze(bands);
 
     //Then add a bit of that to the eased audio spectrum
+    float easeFactor = 0.1f;
     for (int i = 0; i < numBands; i++) {
-      spectrum[i] += (bands[i] - spectrum[i]) * 0.1;
+      if(bands[i] == 0) {
+        bands[i] = random(bounds[i][1]);
+        easeFactor = 0.05;
+      }
+      spectrum[i] += (bands[i] - spectrum[i]) * easeFactor;
     }
   }
 
