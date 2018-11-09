@@ -135,9 +135,8 @@ class Ricklet extends PApplet
 			surface.setLocation(pos.x, pos.y);
 			wasUpdated = false;
 		}
-    if(soundControl.waiting) return;
+    	if(soundControl.waiting) return;
 
-		// pulse = soundControl.getChannel(i);
 		float p = constrain(pulse, 0, 1);
 		int f = ceil(map(p, 0, 1, 1, frames.length-1));
 		if (!imageLoader.isAlive())
