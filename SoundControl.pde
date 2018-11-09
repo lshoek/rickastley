@@ -77,6 +77,7 @@ class SoundControl {
    Returns the position of the playback in seconds
    **/
   float getPosition() {
+    if(startTime == 0) return 0;
     return (millis() - startTime) / 1000f;
   }
 
