@@ -18,7 +18,7 @@ void initScheduler()
 
 void scheduler()
 {
-	println(soundControl.getPosition());
+	float time = soundControl.getPosition() + 10.0;
 	switch (sectionIndex) 
 	{
 		case 0:
@@ -32,7 +32,7 @@ void scheduler()
 			sketches[1].loadClip(640, 0, 400, 400, sectionIndex, 2); //head
 			markSection(sectionIndex);
 		}
-		if (soundControl.getPosition() > 18.0) nextSection();
+		if (time > 18.0) nextSection();
 		break;
 
 		case 1:
@@ -44,7 +44,7 @@ void scheduler()
 			sketches[1].loadClip(640, 25, 450, 300, sectionIndex, 2); //head
 			markSection(sectionIndex);
 		}
-		if (soundControl.getPosition() > 42.0) nextSection();
+		if (time > 42.0) nextSection();
 		break;
 
 		case 2:
@@ -56,7 +56,7 @@ void scheduler()
 			sketches[1].loadClip(640, 25, 320, 240, sectionIndex, 4); //head
 			markSection(sectionIndex);
 		}
-		if (soundControl.getPosition() > 60.0) nextSection();
+		if (time > 60.0) nextSection();
 		break;
 
 		case 3:
@@ -68,7 +68,7 @@ void scheduler()
 			sketches[1].loadClip(780, 50, 320, 320, sectionIndex, 4); //head			
 			markSection(sectionIndex);
 		}
-		if (soundControl.getPosition() > 84.0) nextSection();
+		if (time > 84.0) nextSection();
 		break;
 
 		case 4:
@@ -80,7 +80,7 @@ void scheduler()
 			sketches[1].loadClip(780, -20, 320, 320, sectionIndex, 1); //head			
 			markSection(sectionIndex);
 		}
-		if (soundControl.getPosition() > 119.0) nextSection();
+		if (time > 119.0) nextSection();
 		break;
 
 		case 5:
@@ -92,7 +92,7 @@ void scheduler()
 			sketches[0].loadClip(1065, 75, 320, 320, sectionIndex, 1); //head
 			markSection(sectionIndex);
 		}
-		if (soundControl.getPosition() > 136.0) nextSection();
+		if (time > 136.0) nextSection();
 		break;
 
 		case 6:
@@ -104,7 +104,7 @@ void scheduler()
 			sketches[0].loadClip(1065, 75, 320, 320, sectionIndex, 3); //head
 			markSection(sectionIndex);
 		}
-		if (soundControl.getPosition() > 160.0) nextSection();
+		if (time > 160.0) nextSection();
 		break;
 
 		case 7:
@@ -119,7 +119,7 @@ void scheduler()
 			sketches[0].loadClip(640, 100, 400, 320, sectionIndex, 4); // head
 			markSection(sectionIndex);
 		}
-		if (soundControl.getPosition() > 178.0) nextSection();
+		if (time > 178.0) nextSection();
 		break;
 
 		case 8:
@@ -133,7 +133,7 @@ void scheduler()
 			sketches[0].loadClip(550, 500, 640, 240, sectionIndex, 4);	//mouth		
 			markSection(sectionIndex);
 		}
-		if (soundControl.getPosition() > 195.0) nextSection();
+		if (time > 195.0) nextSection();
 		break;
 
 		case 9:
@@ -148,7 +148,7 @@ void scheduler()
 			sketches[0].loadClip(640, 75, 400, 400, sectionIndex, 4); //face
 			markSection(sectionIndex);
 		}
-		if (soundControl.getPosition() > 317.0) nextSection();
+		if (time > 317.0) nextSection();
 		break;
 
 		default:
