@@ -18,7 +18,7 @@ void initScheduler()
 
 void scheduler()
 {
-	float time = soundControl.getPosition() + 10.0;
+	float time = soundControl.getPosition();
 	switch (sectionIndex) 
 	{
 		case 0:
@@ -110,6 +110,7 @@ void scheduler()
 		case 7:
 		if (!sections[sectionIndex])
 		{
+			sketches[3].setVisibility(true);
 			sketches[4].setVisibility(true);
 
 			sketches[4].loadClip(1100, 250, 500, 400, sectionIndex, 4); // leftarm
@@ -148,7 +149,7 @@ void scheduler()
 			sketches[0].loadClip(640, 75, 400, 400, sectionIndex, 4); //face
 			markSection(sectionIndex);
 		}
-		if (time > 317.0) nextSection();
+		if (time > 317.0) exit();
 		break;
 
 		default:
